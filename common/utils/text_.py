@@ -84,4 +84,3 @@ def md5_encode(string):
     m2 = hashlib.md5()
     m2.update(string)
     return m2.hexdigest()
-

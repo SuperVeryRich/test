@@ -3,7 +3,6 @@ import logging
 
 __all__ = [
     'Logging',
-    'LOG'
 ]
 
 
@@ -14,8 +13,12 @@ class LoggingBase(object):
         return logging.getLogger('default')
 
     @property
-    def scripts_logger(self):
-        return logging.getLogger('scripts')
+    def script_logger(self):
+        return logging.getLogger('script')
+
+    @property
+    def task_logger(self):
+        return logging.getLogger('task')
 
     @staticmethod
     def custom_logger(logger_name):
@@ -27,4 +30,3 @@ class LoggingBase(object):
 
 
 Logging = LoggingBase()
-LOG = Logging.default_logger

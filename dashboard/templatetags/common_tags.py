@@ -22,3 +22,8 @@ def status_css_selector(status):
         return 'danger'
     else:
         return 'primary'
+
+
+@register.filter(is_safe=True)
+def label_css_decorator(label, cls):
+    return label.label_tag(attrs={'class': cls})

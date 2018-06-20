@@ -252,18 +252,34 @@ LOGGING = {
             'backupCount': 5,
             'formatter': 'standard',
         },
-        'error': {
+        'default_error': {
             'level': 'ERROR',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': r'D:\django_log\error.log',
+            'filename': r'D:\django_log\default_error.log',
             'maxBytes': 1024**3*10,
             'backupCount': 5,
             'formatter': 'standard',
         },
-        'scripts': {
+        'task': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': r'D:\django_log\scripts.log',
+            'filename': r'D:\django_log\task.log',
+            'maxBytes': 1024**3*10,
+            'backupCount': 5,
+            'formatter': 'standard',
+        },
+        'task_error': {
+            'level': 'ERROR',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': r'D:\django_log\task_error.log',
+            'maxBytes': 1024**3*10,
+            'backupCount': 5,
+            'formatter': 'standard',
+        },
+        'script': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': r'D:\django_log\script.log',
             'maxBytes': 1024**3*10,
             'backupCount': 5,
             'formatter': 'standard',
@@ -281,29 +297,21 @@ LOGGING = {
             'propagate': False,
         },
         'default': {
-            'handlers': ['default', 'error'],
+            'handlers': ['default', 'default_error'],
             'level': 'DEBUG',
             'propagate': False
         },
-        'scripts': {
-            'handlers': ['scripts'],
+        'task': {
+            'handlers': ['task', 'task_error'],
+            'level': 'DEBUG',
+            'propagate': False
+        },
+        'script': {
+            'handlers': ['script'],
             'level': 'INFO',
             'propagate': True
         },
     }
-}
-
-
-# OpenStack
-OPENSTACK = {
-    'keystone': {
-        'host': '10.10.132.161',
-        'port': 5000,
-        'user': 'admin',
-        'pass': '06a29a1b7d84cb7b713a',
-        'token_timeout': 12 * 60 * 60,  # keystone token timeout, seconds
-        'project_id': 'c5bb6219baf84706aba37bf9f37ea911',   # should active
-    },
 }
 
 

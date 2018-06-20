@@ -21,6 +21,13 @@ class ECloudException(Exception):
     desc = 'Undefined exception'
     code = 0
 
+    def __init__(self, msg=None):
+        self.msg = msg
+
+    def __str__(self):
+        return '%s: %s' % (self.desc, str(self.msg)) \
+            if self.msg else self.desc
+
 
 """
 System common exceptions
@@ -34,6 +41,11 @@ class UndefinedException(ECloudException):
 
 
 class InvalidParameters(ECloudException):
+    """Invalid parameters from request"""
+
+    def __init__(self, msg):
+        pass
+
     desc = 'Invalid Parameters'
     code = 601
 

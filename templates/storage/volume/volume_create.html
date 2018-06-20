@@ -3,7 +3,7 @@
 {% load static %}
 {% load common_tags %}
 
-{% block sub_title %}{% trans 'Volume add' %}{% endblock %}
+{% block sub_title %}{% trans 'Volume create' %}{% endblock %}
 {% block dashboard_css %}
   <link href="{% static 'plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css' %}" rel="stylesheet">
 {% endblock %}
@@ -12,7 +12,7 @@
 {% block container %}
   <div class="row">
     <div class="col-lg-12">
-      <div class="card-box" id="volume-add-card">
+      <div class="card-box" id="volume-create-card">
         {#        <div class="dropdown pull-right">#}
         {#          <a href="#" class="dropdown-toggle arrow-none card-drop" data-toggle="dropdown" aria-expanded="false">#}
         {#            <i class="mdi mdi-dots-vertical"></i>#}
@@ -25,55 +25,21 @@
         {#          </div>#}
         {#        </div>#}
 
-        <h4 class="header-title m-t-0 m-b-30">{% trans 'Volume list' %}</h4>
+        <h4 class="header-title m-t-0 m-b-30">{% trans 'Volume create' %}</h4>
 
         <p class="text-muted font-13 m-b-25">
           {% blocktrans %}
-            Welcome to volume add page, please click top-right icon to discover more.
+            Welcome to volume create page, please click top-right icon to discover more.
           {% endblocktrans %}
         </p>
 
-        <div>
-          <form class="form-horizontal" role="form">
-            <div class="form-group">
-              <label class="col-2 col-form-label" for="name-input">{% trans 'Name' %}</label>
-              <div class="col-10">
-                <input id="name-input" class="form-control" name="name-input" type="text" autofocus="autofocus">
-              </div>
-            </div>
-            <div class="form-group">
-              <div class="form-group">
-                <label class="col-2 col-form-label" for="number-input">{% trans 'Number' %}</label>
-                <div class="col-10">
-                  <input id="number-input" class="form-control" type="text" value="1" name="number-input">
-                </div>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-2 col-form-label" for="user-select">{% trans 'User select' %}</label>
-              <div class="col-10">
-                <select id="user-select" class="form-control" name="user-select">
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-2 col-form-label" for="storage-select">{% trans 'Storage select' %}</label>
-              <div class="col-10">
-                <select id="storage-select" class="form-control" name="storage-select">
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
-                  <option>5</option>
-                </select>
-              </div>
-            </div>
-          </form>
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-12">
+            {% include 'storage/volume/forms/volume_create_form.html' with form=form %}
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12">
+            <p>Volume creation instruction here</p>
+          </div>
         </div>
       </div>
     </div><!-- end col -->
@@ -87,6 +53,6 @@
       {# django value to js #}
 
   </script>
-  <script src="{% static 'js/pages/storage/volume/volume_add.js' %}"></script>
+  <script src="{% static 'js/pages/storage/volume/volume_create.js' %}"></script>
   <script src="{% static 'plugins/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js' %}"></script>
 {% endblock %}

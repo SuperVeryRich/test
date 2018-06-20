@@ -1,5 +1,8 @@
 from celery.worker.request import Request
-from common.log import LOG
+from common.log import Logging
+
+
+LOG = Logging.task_logger
 
 
 class MyRequest(Request):

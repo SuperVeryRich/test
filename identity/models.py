@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from common.constants.resources import *
-from common.models import Instances, Volumes, ComputeNodes
+from common.models import Instances, Volumes, ComputeNodes, Storage
 from common.utils.text_ import UUID, obj2iter
 
 # Create your models here.
@@ -57,19 +57,23 @@ class ResourceMixin:
 
     @staticmethod
     def _get_resources_detail(resources, resource_type):
+        resource_ids = [r.id for r in resources]
         if resource_type == VOLUME:
-            resource_ids = [r.id for r in resources]
             resources = Volumes.objects.filter(deleted=0, id__in=resource_ids)
         elif resource_type == SERVER:
             resource_ids = [r.uuid for r in resources]
             servers = Instances.objects.filter(deleted=0)
             resources = servers.filter(deleted=0, uuid__in=resource_ids)
         elif resource_type == HOST:
-            # TODO: more types
-            resource_ids = [r.id for r in resources]
             hosts = ComputeNodes.objects.filter(deleted=0)
             resources = hosts.filter(deleted=0, id__in=resource_ids)
+        elif resource_type == STORAGE:
+            resource_ids = [r.id for r in resources]
+            resources = Storage.objects.filter(id__in=resource_ids)
+        elif resource_type == NETWORK:
+            raise NotImplemented
         else:
+            # TODO: more types
             raise ValueError
         return resources
 
@@ -138,6 +142,21 @@ class ResourceMixin:
             Resource.objects.filter(user=self).update(user_id=None)
 
 
+class Project(models.Model):
+    """
+    需要和keystone的tenant/project保持一致
+    """
+
+    id = models.CharField(max_length=36, verbose_name='id', primary_key=True)
+
+    def __str__(self):
+        return self.id
+
+    class Meta:
+        db_table = 'auth_project'
+        default_permissions = ()
+
+
 class User(ResourceMixin, AbstractUser, UserManager):
     """
     Custom user model
@@ -166,8 +185,9 @@ class User(ResourceMixin, AbstractUser, UserManager):
         },
     )
     email = models.EmailField(_('email address'), blank=True)
-
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+
+    # project = models.ForeignKey(Project, on_delete=models.CASCADE, null=True)
 
     objects = UserManager()
 
@@ -204,21 +224,6 @@ class User(ResourceMixin, AbstractUser, UserManager):
         super().delete(using=using, keep_parents=keep_parents)
 
 
-class Project(models.Model):
-    """
-    需要和keystone的tenant/project保持一致
-    """
-
-    id = models.CharField(max_length=36, verbose_name='id', primary_key=True)
-    name = models.CharField(max_length=64)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        db_table = 'auth_tenant'
-
-
 class Resource(models.Model):
     """
     User's resource assignment, using get_FOO_display to get display name like Server
@@ -235,6 +240,7 @@ class Resource(models.Model):
     type = models.CharField(max_length=255, choices=RESOURCE_TYPES,
                             verbose_name=_('type'))
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    task_id = models.CharField(max_length=255, null=True)  # This field stores celery task id
 
     class Meta:
         ordering = ['type']

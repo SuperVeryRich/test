@@ -13,7 +13,7 @@ class Host(models.Model):
     description = models.CharField(max_length=255, verbose_name=_('description'))
 
     class Meta:
-        db_table = 'host'
+        # db_table = 'host'
         permissions = (
             ('list_host', _('Can see host list')),
             ('detail_host', _('Can see host detail')),

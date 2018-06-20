@@ -1,32 +1,47 @@
-{% load i18n %}
+{% load i18n common_tags %}
 
-<form class="modal-content" method="post" action="{% url 'storage:volume_create' %}" role="form">
+<form class="form-horizontal" method="post" action="{% url 'storage:volume_create' %}" role="form">
   {% csrf_token %}
-  <div class="modal-header">
-    <h5 class="modal-title">{% trans 'Volume create' %}</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
+  <div class="form-group">
+    {{ form.name|label_css_decorator:'col-2 col-form-label' }}
+    <div class="col-10">
+      {{ form.name }}
+    </div>
   </div>
-  <div class="modal-body">
-    <div class="row">
-      <div class="col-12">
-        <div class="p-20">
-          {{ form.non_field_errors }}
-          {% for error in form.errors %}
-            {{ error }}
-          {% endfor %}
-          <div class="form-group ">
-            <div class="col-xs-12">
-              {{ form.name }}
-            </div>
-          </div>
-        </div>
+    <div class="form-group">
+    <div class="form-group">
+      {{ form.size|label_css_decorator:'col-2 col-form-label' }}
+      <div class="col-10">
+        {{ form.size }}
       </div>
     </div>
   </div>
-  <div class="modal-footer">
+  <div class="form-group">
+    <div class="form-group">
+      {{ form.number|label_css_decorator:'col-2 col-form-label' }}
+      <div class="col-10">
+        {{ form.number }}
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    {{ form.user|label_css_decorator:'col-2 col-form-label' }}
+    <div class="col-10">
+      {{ form.user }}
+    </div>
+  </div>
+  <div class="form-group">
+    {{ form.storage|label_css_decorator:'col-2 col-form-label' }}
+    <div class="col-10">
+      {% if form.storage.choices|length > 0 %}
+      {{ form.storage }}
+        {% else %}
+        {{ form.storage }}
+      {% endif %}
+    </div>
+  </div>
+  <div class="modal-footer col-10 m-t-40">
     <button type="submit" class="btn btn-primary">{% trans 'Save changes' %}</button>
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans 'Close' %}</button>
   </div>
 </form>

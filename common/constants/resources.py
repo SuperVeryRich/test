@@ -1,6 +1,6 @@
 # coding=utf-8
 """
-NOTICE, Keep all constants
+
 """
 HOST = 'host'
 SERVER = 'server'

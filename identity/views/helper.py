@@ -1,6 +1,5 @@
 from common.constants.resources import *
-from common.models import Instances, Volumes, ComputeNodes
-from common.models.utils import get_resource_model
+from common.models import Instances, Volumes, ComputeNodes, get_resource_model
 from identity.models import Permission
 
 Resource = get_resource_model()

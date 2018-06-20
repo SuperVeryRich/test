@@ -16,15 +16,16 @@ from django.views.generic import (CreateView, UpdateView,
 from django.contrib.auth.views import logout
 from django.views.decorators.cache import never_cache
 from common.exceptions import InvalidParameters
-from common.forms.utils import form_errors_to_list
+from common.forms import form_errors_to_list, DivErrorList
 from common.mixin import JSONResponseMixin
-from identity.models import Permission, Resource
 from identity.forms import *
 from identity.views.helper import get_permissions
 from identity.exceptions import *
+from common.openstack.keystone import KeystoneRequest
 
 User = get_user_model()
 logger = logging.getLogger('default')
+R = KeystoneRequest()
 
 
 # Create your views here.
@@ -64,6 +65,12 @@ class Login(auth_views.LoginView):
 
             # log into
             login(request, user)
+
+            # add token, mock
+            # TODO: token request
+            from common.openstack.constants import MOCK_TOKEN
+            from time import time
+            request.session['token'] = {'id': MOCK_TOKEN, 'created_at': time()}
 
             remember_me = form.cleaned_data['remember_me']
             if not remember_me:
@@ -110,18 +117,20 @@ class UserCreate(JSONResponseMixin, PermissionRequiredMixin, CreateView):
                                error_class=DivErrorList)
         if form.is_valid():
             username = form.cleaned_data['username']
-            user = self.model().create_user(
+            self.model().create_user(
                 username,
                 email=form.cleaned_data['email'],
                 password=form.cleaned_data['password1']
             )
-            subject = 'Account center'
-            email_content = render(request,
-                                   'identity/mail/account_created.html',
-                                   content_type='text/html',
-                                   context={'username': username,
-                                            'subject': subject}).content
+            # subject = 'Account center'
+            # email_content = render(request,
+            #                        'identity/mail/account_created.html',
+            #                        content_type='text/html',
+            #                        context={'username': username,
+            #                                 'subject': subject}).content
             # send_mail_task(subject, '', [user.email], html_message=email_content).delay()
+
+            # get OpenStack token
 
             messages.add_message(request, messages.SUCCESS,
                                  'User %s has been successfully created.' % username)
